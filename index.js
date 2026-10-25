@@ -52,27 +52,39 @@ const port = 8080;
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
-app.get("/", (req, res) => {
-    let diceVal = Math.floor(Math.random() * 6) + 1;
-    res.render("rolldice.ejs", { diceVal });
-});
+// app.get("/", (req, res) => {
+//     let diceVal = Math.floor(Math.random() * 6) + 1;
+//     res.render("rolldice.ejs", { diceVal });
+// });
 
-app.get("/:username", (req, res) => {
-    const followers = ["adam", "bob", "steve", "jobby"];
+app.get("/",  (req, res) => {
+    res.render("home.ejs");
+})
+
+app.get(["/ig/:username", "/:username"], (req, res) => {
     let { username } = req.params;
-    res.render("instagram.ejs", {username, followers
-        
-    });
+    const instaData = require("./data.json");
+    const data = instaData[username];
+    if (data){
+         res.render("instagram.ejs", { data });
+    } else {
+        res.render("error.ejs");
+    }
+
 });
 
-app.get("/rolldice", (req, res) => {
-    let diceVal = Math.floor(Math.random() * 6) + 1;
-    res.render("rolldice.ejs", { diceVal });
-});
+// app.get("/rolldice", (req, res) => {
+//     let diceVal = Math.floor(Math.random() * 6) + 1;
+//     res.render("rolldice.ejs", { diceVal });
+// });     
+
+// app.get("/:username", (req, res) => {
+//     let { username } = req.params;
+//     const instaData = require("./data.json");
+//     const data = instaData[username];
+// });
 
 
 app.listen(port, () => {
     console.log(`Server is listening on the ${port}`);
-}); 
-
-
+});
